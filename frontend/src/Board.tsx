@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { socket } from "./socket";
 import Tile from "./Tile";
 
@@ -26,6 +26,8 @@ function Board({ board, roomId, currentTurn }: BoardProps) {
           <Tile key={`${i}-${j}`} tile={tile} onClick={() => handleClick(i, j)} />
         ))
       )}
+
+      {false && <div>Current Turn: Player {currentTurn + 1}</div>}
     </div>
   );
 }
