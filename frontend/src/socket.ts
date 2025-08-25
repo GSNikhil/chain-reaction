@@ -1,4 +1,8 @@
 import { io } from "socket.io-client";
 
 // adjust to backend URL
-export const socket = io("http://localhost:3001");
+let VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+if (!VITE_BACKEND_URL) {
+  VITE_BACKEND_URL = "http://localhost:3001";
+}
+export const socket = io(VITE_BACKEND_URL);
