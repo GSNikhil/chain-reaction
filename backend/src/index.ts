@@ -1,15 +1,29 @@
 import express from "express";
-import http from "http";
+import * as http from "http";
 import { Server, Socket } from "socket.io";
-import { Player, Room, Tile } from "./types.ts";
-import { placeOrb } from "./game.ts";
+import { Player, Room, Tile } from "./types";
+import { placeOrb } from "./game";
+// import cors from "cors"; // Import the cors middleware
 
 
 const app = express();
 const server = http.createServer(app);
+
+// Use the cors middleware
+// app.use(cors());
+
+// const io = new Server(server, {
+//   cors: { origin: "*" },
+// });
+
 const io = new Server(server, {
-  cors: { origin: "*" },
+  cors: {
+    origin: "https://chainreactiongamengs.netlify.app",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
+
 
 let rooms: Record<string, Room> = {};
 

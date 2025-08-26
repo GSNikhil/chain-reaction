@@ -3,6 +3,6 @@ import { io } from "socket.io-client";
 // adjust to backend URL
 let VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 if (!VITE_BACKEND_URL) {
-  VITE_BACKEND_URL = "http://localhost:3001";
+  VITE_BACKEND_URL = "http://localhost:3000";
 }
 export const socket = io(VITE_BACKEND_URL);
