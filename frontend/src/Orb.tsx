@@ -54,7 +54,7 @@ const Orb: React.FC<OrbProps> = ({
   gradientId = "orbGradient",
   count = 1,
   vibrate = true,
-  intensity = 0.9, // smaller value = more intense vibration
+  intensity = 0.5, // smaller value = more intense vibration
   ...props
 }) => {
   const getAnimationStyle = (idx: number) => {
@@ -122,23 +122,23 @@ const Orb: React.FC<OrbProps> = ({
         {`
           @keyframes vibrate-1 {
             0% { transform: translate(0px, 0px); }
-            50% { transform: translate(${count/intensity}px, -${count/intensity}px); }
-            100% { transform: translate(-${count/intensity}px, ${count/intensity}px); }
+            50% { transform: translate(${intensity*count}px, -${intensity*count}px); }
+            100% { transform: translate(-${intensity*count}px, ${intensity*count}px); }
           }
           @keyframes vibrate-2 {
             0% { transform: translate(0px, 0px); }
-            50% { transform: translate(-${count/intensity}px, ${count/intensity}px); }
-            100% { transform: translate(${count/intensity}px, -${count/intensity}px); }
+            50% { transform: translate(-${intensity*count}px, ${intensity*count}px); }
+            100% { transform: translate(${intensity*count}px, -${intensity*count}px); }
           }
           @keyframes vibrate-3 {
             0% { transform: translate(0px, 0px); }
-            50% { transform: translate(${count/intensity}px, ${count/intensity}px); }
-            100% { transform: translate(-${count/intensity}px, -${count/intensity}px); }
+            50% { transform: translate(${intensity*count}px, ${intensity*count}px); }
+            100% { transform: translate(-${intensity*count}px, -${intensity*count}px); }
           }
           @keyframes vibrate-4 {
             0% { transform: translate(0px, 0px); }
-            50% { transform: translate(-${count/intensity}px, -${count/intensity}px); }
-            100% { transform: translate(${count/intensity}px, ${count/intensity}px); }
+            50% { transform: translate(-${intensity*count}px, -${intensity*count}px); }
+            100% { transform: translate(${intensity*count}px, ${intensity*count}px); }
           }
         `}
       </style>

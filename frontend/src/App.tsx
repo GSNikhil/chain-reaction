@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import { socket } from "./socket";
 import Board from "./Board";
+import "./App.css";
+
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -10,8 +12,15 @@ function App() {
   const [gameState, setGameState] = useState<any>(null);
   const [joinLink, setJoinLink] = useState<string | null>(null);
   const [currentBoard, setCurrentBoard] = useState<any>(null);
+  const [numPlayers, setNumPlayers] = useState(2);
 
   useEffect(() => {
+    // Extract roomId from URL if present
+  const pathParts = window.location.pathname.split("/");
+  if (pathParts[1] === "join" && pathParts[2]) {
+    setRoomId(pathParts[2]);
+  }
+
     socket.on("connect", () => setConnected(true));
     socket.on("disconnect", () => setConnected(false));
 
@@ -59,7 +68,7 @@ function App() {
 
   const createRoom = () => {
     if (!playerName) return;
-    socket.emit("createRoom", { playerName, customCode: roomId, maxPlayers: 2 });
+    socket.emit("createRoom", { playerName, customCode: roomId, maxPlayers: numPlayers });
   };
 
   const joinRoom = () => {
@@ -81,23 +90,29 @@ function App() {
 
       {!gameState && (
         <div>
-          <p>
-            <input
-              type="text"
-              placeholder="Your name"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value)}
-            />
-          </p>
 
-          <p>
-            <input
-              type="text"
-              placeholder="Room ID"
-              value={roomId || ""}
-              onChange={(e) => setRoomId(e.target.value)}
-            />
-          </p>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={playerName}
+            onChange={(e) => setPlayerName(e.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="Room ID"
+            value={roomId || ""}
+            onChange={(e) => setRoomId(e.target.value)}
+          />
+
+          <select
+            value={numPlayers}
+            onChange={(e) => setNumPlayers(Number(e.target.value))}
+          >
+            <option value={2}>2 Players</option>
+            <option value={3}>3 Players</option>
+            <option value={4}>4 Players</option>
+          </select>
 
           <div>
             <button onClick={createRoom}>Create Room</button>
@@ -125,7 +140,7 @@ function App() {
                   padding: "10px 15px",
                   borderRadius: "8px",
                   backgroundColor: "#000000ff",
-                  border: gameState.currentTurn === idx ? "5px solid #ffffffff" : "1px solid #000000ff",
+                  border: gameState.currentTurn === idx ? `5px solid ${player.color}` : "1px solid #000000ff",
                   fontWeight: gameState.currentTurn === idx ? "bold" : "normal",
                   minWidth: "120px",
                   color: player.eliminated ? "#767676ff" : "#ffffffff",
