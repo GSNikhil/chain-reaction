@@ -37,12 +37,17 @@ function App() {
       setCurrentBoard(room.board);
     });
 
-    socket.on("updateState", ({ room }) => {
+    socket.on("updateState", async ({ room }) => {
       setGameState(room);
-      animateMoves(room.moves);
+      await animateMoves(room.moves);
       if (room.winner !== null) {
         alert(`Game Over! Winner is Player ${room.winner + 1}: ${room.players[room.winner].name}`);
       }
+    });
+
+    socket.on("resetBoard", ({ room }) => {
+      setGameState(room);
+      setCurrentBoard(room.board);
     });
 
     return () => {
@@ -51,10 +56,12 @@ function App() {
       socket.off("roomCreated");
       socket.off("roomJoined");
       socket.off("updateState");
+      socket.off("resetBoard");
     };
   }, []);
 
-  const animateMoves = (moves: any[]) => {
+  const animateMoves = (moves: any[]): Promise<void> => {
+  return new Promise((resolve) => {
     let i = 0;
     const intervalId = setInterval(() => {
       if (i < moves.length) {
@@ -62,9 +69,12 @@ function App() {
         i++;
       } else {
         clearInterval(intervalId);
+        resolve(); 
       }
-    }, 100);
-  };
+    }, 10);
+  });
+};
+
 
   const createRoom = () => {
     if (!playerName) return;
@@ -76,15 +86,25 @@ function App() {
     socket.emit("joinRoom", { roomId, playerName });
   };
 
+  const replayRoom = () => {
+    if (!roomId) return;
+    console.log("Replaying room:", roomId);
+    socket.emit("replayRoom", { roomId });
+  };
+
   return (
     <div style={{ padding: 20, textAlign: "center", width: "100%" }}>
-      <h1>Chain Reaction</h1>
+      <a href="/" style={{textDecoration: 'none', color: 'inherit'}}>
+        {!gameState && <img src="\src\assets\logo.png" style={{width: '100%', maxWidth: '100px'}}></img>}
+        {gameState && <h4>{"\u2302"} Home</h4>}
+        <h1>Chain Reaction</h1>
+      </a>
 
       {joinLink && (
         <p>
           Share this link to invite others: <a href={joinLink}>{joinLink}</a>
         </p>
-      )}
+      )} 
 
       {!connected && <p>Connecting...</p>}
 
@@ -154,6 +174,8 @@ function App() {
           </div>
         </div>
       )}
+
+      {(gameState && gameState.winner!==null) && <button onClick={replayRoom}>Replay</button>}
     </div>
   );
 }

@@ -131,6 +131,21 @@ io.on("connection", (socket: Socket) => {
     // }
   });
 
+  socket.on("replayRoom", ({roomId}) => {
+    if (!rooms[roomId]) return;
+    const room = rooms[roomId];
+    for (const player of room.players) {
+      player.eliminated = false;
+      player.hasPlayed = false;
+    }
+    room.currentTurn = 0;
+    room.winner = null;
+    room.board = room.board.map(row => row.map(() => new Tile()));
+    room.moves = [];
+    room.lastMoveTime = Date.now();
+    io.to(roomId).emit("resetBoard", { room });
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
   });
