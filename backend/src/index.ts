@@ -57,8 +57,8 @@ io.on("connection", (socket: Socket) => {
 
     const rows = 8;
     const cols = 6;
-    const newBoard = Array.from({ length: rows }, () => 
-        Array.from({ length: cols }, () => new Tile()) // Creates a new Tile for every cell
+    const newBoard = Array.from({ length: rows }, () =>
+      Array.from({ length: cols }, () => new Tile()) // Creates a new Tile for every cell
     );
 
     const newRoom: Room = {
@@ -92,7 +92,16 @@ io.on("connection", (socket: Socket) => {
       return;
     }
 
-    const colors = ["red", "blue", "green", "yellow"];
+    const colors = [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "cyan",     // bright teal-blue
+      "magenta",  // vivid pink-purple
+      "orange",   // strong warm tone, distinct from red/yellow
+      "white"      // neon green, brighter than standard green
+    ];
     const color = colors[room.players.length];
 
     room.players.push(new Player(socket.id, playerName, color));
@@ -118,21 +127,21 @@ io.on("connection", (socket: Socket) => {
     }
 
     placeOrb(room, x, y, playerIndex);
-    
+
     // if (room.winner !== null) {
     //   io.to(roomId).emit("gameDone", {
     //     winner: room.winner
     //   });
     // }
     // else{
-      io.to(roomId).emit("updateState", {
-        room: room,
-      });
-      room.moves = [];
+    io.to(roomId).emit("updateState", {
+      room: room,
+    });
+    room.moves = [];
     // }
   });
 
-  socket.on("replayRoom", ({roomId}) => {
+  socket.on("replayRoom", ({ roomId }) => {
     if (!rooms[roomId]) return;
     const room = rooms[roomId];
     for (const player of room.players) {

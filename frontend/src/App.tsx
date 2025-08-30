@@ -199,6 +199,10 @@ function App() {
             <option value={2}>2 Players</option>
             <option value={3}>3 Players</option>
             <option value={4}>4 Players</option>
+            <option value={5}>5 Players</option>
+            <option value={6}>6 Players</option>
+            <option value={7}>7 Players</option>
+            <option value={8}>8 Players</option>
           </select>
 
           <div>
