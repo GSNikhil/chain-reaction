@@ -27,6 +27,17 @@ const io = new Server(server, {
 
 let rooms: Record<string, Room> = {};
 
+const colors = [
+      "red",
+      "blue",
+      "green",
+      "yellow",
+      "cyan",     // bright teal-blue
+      "magenta",  // vivid pink-purple
+      "orange",   // strong warm tone, distinct from red/yellow
+      "white"      // neon green, brighter than standard green
+];
+
 // --- Utility: random room code ---
 function generateRoomId(): string {
   return Math.random().toString(36).substr(2, 6);
@@ -51,7 +62,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("createRoom", ({ playerName, customCode, maxPlayers }) => {
     const roomId = customCode || generateRoomId();
     if (rooms[roomId]) {
-      socket.emit("errorMessage", { message: "Room already exists" });
+      socket.emit("errorMessage", { message: `Room ${roomId} already exists. Create a new room or click Join Room button.` });
       return;
     }
 
@@ -63,7 +74,7 @@ io.on("connection", (socket: Socket) => {
 
     const newRoom: Room = {
       players: [
-        new Player(socket.id, playerName, "red")// first player
+        new Player(socket.id, playerName, colors[0])// first player
       ],
       maxPlayers: maxPlayers || 2,
       board: newBoard,
@@ -92,16 +103,7 @@ io.on("connection", (socket: Socket) => {
       return;
     }
 
-    const colors = [
-      "red",
-      "blue",
-      "green",
-      "yellow",
-      "cyan",     // bright teal-blue
-      "magenta",  // vivid pink-purple
-      "orange",   // strong warm tone, distinct from red/yellow
-      "white"      // neon green, brighter than standard green
-    ];
+    
     const color = colors[room.players.length];
 
     room.players.push(new Player(socket.id, playerName, color));

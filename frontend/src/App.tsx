@@ -53,6 +53,10 @@ function App() {
       setCurrentBoard(room.board);
     });
 
+    socket.on("errorMessage", ({ message }) => {
+      alert(message);
+    });
+
     return () => {
       socket.off("connect");
       socket.off("disconnect");
