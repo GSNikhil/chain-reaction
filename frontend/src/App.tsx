@@ -16,10 +16,10 @@ function App() {
 
   useEffect(() => {
     // Extract roomId from URL if present
-  const pathParts = window.location.pathname.split("/");
-  if (pathParts[1] === "join" && pathParts[2]) {
-    setRoomId(pathParts[2]);
-  }
+    const pathParts = window.location.pathname.split("/");
+    if (pathParts[1] === "join" && pathParts[2]) {
+      setRoomId(pathParts[2]);
+    }
 
     socket.on("connect", () => setConnected(true));
     socket.on("disconnect", () => setConnected(false));
@@ -39,7 +39,10 @@ function App() {
 
     socket.on("updateState", async ({ room }) => {
       setGameState(room);
+      // console.log("Room moves:", room.moves);
       await animateMoves(room.moves);
+      setCurrentBoard(room.board);
+      // Check for winner
       if (room.winner !== null) {
         alert(`Game Over! Winner is Player ${room.winner + 1}: ${room.players[room.winner].name}`);
       }
@@ -60,20 +63,74 @@ function App() {
     };
   }, []);
 
+  // const animateMoves = (moves: any[]): Promise<void> => {
+  //   return new Promise((resolve) => {
+  //     let i = 0;
+  //     const intervalId = setInterval(() => {
+  //       if (i < moves.length) {
+  //         setCurrentBoard(moves[i]);
+  //         i++;
+  //       } else {
+  //         clearInterval(intervalId);
+  //         resolve();
+  //       }
+  //     }, 10);
+  //   });
+  // };
+
+  // const animateMoves = (moves: any[]): Promise<void> => {
+  //   console.log("Animating moves:", moves);
+  //   return new Promise((resolve) => {
+  //     const intervalId = setInterval(() => {
+  //       for (const move of moves) {
+  //         console.log("Move", move);
+  //         setCurrentBoard((prevBoard:any) => {
+  //           console.log("Move at i:", move);
+  //           prevBoard[move.x][move.y] = {
+  //             count: move.count,
+  //             owner: move.owner
+  //           };
+  //           return prevBoard;
+  //         });
+  //       }
+      
+  //       clearInterval(intervalId);
+  //       resolve();
+  //     }, 100);
+  //   });
+  // };
+
   const animateMoves = (moves: any[]): Promise<void> => {
+  // console.log("Animating moves:", moves);
   return new Promise((resolve) => {
     let i = 0;
+
     const intervalId = setInterval(() => {
       if (i < moves.length) {
-        setCurrentBoard(moves[i]);
+        const move = moves[i];
+        // console.log("Animating move:", move);
+
+        setCurrentBoard((prevBoard: any) => {
+          // Create a deep copy (so React re-renders)
+          const newBoard = prevBoard.map((row: any[]) => [...row]);
+          // console.log("Animating move:", move);
+          newBoard[move.x][move.y] = {
+            count: move.count,
+            owner: move.owner
+          };
+
+          return newBoard;
+        });
+
         i++;
       } else {
         clearInterval(intervalId);
-        resolve(); 
+        resolve();
       }
-    }, 10);
+    }, 30); // adjust speed (ms per move)
   });
 };
+
 
 
   const createRoom = () => {
@@ -94,8 +151,8 @@ function App() {
 
   return (
     <div style={{ padding: 20, textAlign: "center", width: "100%" }}>
-      <a href="/" style={{textDecoration: 'none', color: 'inherit'}}>
-        {!gameState && <img src="\src\assets\logo.png" style={{width: '100%', maxWidth: '100px'}}></img>}
+      <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+        {!gameState && <img src="\src\assets\logo.png" style={{ width: '100%', maxWidth: '100px' }}></img>}
         {gameState && <h4>{"\u2302"} Home</h4>}
         <h1>Chain Reaction</h1>
       </a>
@@ -104,7 +161,7 @@ function App() {
         <p>
           Share this link to invite others: <a href={joinLink}>{joinLink}</a>
         </p>
-      )} 
+      )}
 
       {!connected && <p>Connecting...</p>}
 
@@ -175,7 +232,7 @@ function App() {
         </div>
       )}
 
-      {(gameState && gameState.winner!==null) && <button onClick={replayRoom}>Replay</button>}
+      {(gameState && gameState.winner !== null) && <button onClick={replayRoom}>Replay</button>}
     </div>
   );
 }

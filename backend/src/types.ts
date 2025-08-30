@@ -11,6 +11,13 @@ export class Tile {
 
 export type Board = Tile[][];
 
+export type Move = {
+  x: number;
+  y: number;
+  count: number;
+  owner: number | null;
+};
+
 // Room and Player interfaces remain unchanged
 export class Player {
   id: string; // socket ID
@@ -35,7 +42,7 @@ export class Room {
   currentTurn: number; // index of players[]
   lastMoveTime: number;
   winner: number | null; // index of players[] or null if no winner yet
-  moves: Board[]; // history of board states
+  moves: Move[]; // history of board states
 
   constructor(players: Player[] = [], maxPlayers: number, board: Board, currentTurn: number = 0, lastMoveTime: number) {
     this.players = players;

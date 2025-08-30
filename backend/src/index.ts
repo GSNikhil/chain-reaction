@@ -128,6 +128,7 @@ io.on("connection", (socket: Socket) => {
       io.to(roomId).emit("updateState", {
         room: room,
       });
+      room.moves = [];
     // }
   });
 

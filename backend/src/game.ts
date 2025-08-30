@@ -45,17 +45,18 @@ export function placeOrb(room: Room, x: number, y: number, playerIndex: number) 
     let queue: [number, number][] = [[x, y]];
     while (queue.length > 0){
         // Create a deep copy of the board before a change happens
-        const boardCopy = structuredClone(board); 
-        room.moves.push(boardCopy);
+        // const boardCopy = structuredClone(board); 
+        // room.moves.push(boardCopy);
 
         const [cx, cy] = queue.shift()!;
         const currentTile = board[cx][cy];
         let critical_mass = criticalMass(board, cx, cy) - 1;
 
-        
         if (currentTile.count > critical_mass) {
             currentTile.count = 0;
             currentTile.owner = null;
+
+            room.moves.push({x: cx, y: cy, count: 0, owner: null});
 
             const directions = [[1,0], [-1,0], [0,1], [0,-1]];
             for (const [dx, dy] of directions) {
@@ -68,11 +69,14 @@ export function placeOrb(room: Room, x: number, y: number, playerIndex: number) 
                 }
             }
         }
+        else{
+            room.moves.push({x: cx, y: cy, count: currentTile.count, owner: currentTile.owner});
+        }
     }
 
     // Push the final state after the while loop has completed
-    const finalBoardCopy = JSON.parse(JSON.stringify(board));
-    room.moves.push(finalBoardCopy);
+    // const finalBoardCopy = JSON.parse(JSON.stringify(board));
+    // room.moves.push(finalBoardCopy);
 
     // Get player counts
     const playerCounts = new Array(room.players.length).fill(0);
@@ -111,6 +115,7 @@ export function placeOrb(room: Room, x: number, y: number, playerIndex: number) 
         }
     } 
 
+    // console.log(room.moves);
 
     return;// { board, eliminated, winner:  curr_winner};
 }
