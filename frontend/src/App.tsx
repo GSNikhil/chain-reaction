@@ -153,7 +153,9 @@ function App() {
     <div style={{ padding: 20, textAlign: "center", width: "100%" }}>
       <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         {!gameState && <img src="\src\assets\logo.png" style={{ width: '100%', maxWidth: '100px' }}></img>}
-        {gameState && <h4>{"\u2302"} Home</h4>}
+        {gameState && <h4>
+          <img src="\src\assets\home.png" style={{ width: '25px', verticalAlign: 'middle', color: 'white' }}></img>
+          Home</h4>}
         <h1>Chain Reaction</h1>
       </a>
 
