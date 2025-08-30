@@ -93,7 +93,7 @@ function App() {
   //           return prevBoard;
   //         });
   //       }
-      
+
   //       clearInterval(intervalId);
   //       resolve();
   //     }, 100);
@@ -101,35 +101,35 @@ function App() {
   // };
 
   const animateMoves = (moves: any[]): Promise<void> => {
-  // console.log("Animating moves:", moves);
-  return new Promise((resolve) => {
-    let i = 0;
+    // console.log("Animating moves:", moves);
+    return new Promise((resolve) => {
+      let i = 0;
 
-    const intervalId = setInterval(() => {
-      if (i < moves.length) {
-        const move = moves[i];
-        // console.log("Animating move:", move);
-
-        setCurrentBoard((prevBoard: any) => {
-          // Create a deep copy (so React re-renders)
-          const newBoard = prevBoard.map((row: any[]) => [...row]);
+      const intervalId = setInterval(() => {
+        if (i < moves.length) {
+          const move = moves[i];
           // console.log("Animating move:", move);
-          newBoard[move.x][move.y] = {
-            count: move.count,
-            owner: move.owner
-          };
 
-          return newBoard;
-        });
+          setCurrentBoard((prevBoard: any) => {
+            // Create a deep copy (so React re-renders)
+            const newBoard = prevBoard.map((row: any[]) => [...row]);
+            // console.log("Animating move:", move);
+            newBoard[move.x][move.y] = {
+              count: move.count,
+              owner: move.owner
+            };
 
-        i++;
-      } else {
-        clearInterval(intervalId);
-        resolve();
-      }
-    }, 30); // adjust speed (ms per move)
-  });
-};
+            return newBoard;
+          });
+
+          i++;
+        } else {
+          clearInterval(intervalId);
+          resolve();
+        }
+      }, 30); // adjust speed (ms per move)
+    });
+  };
 
 
 
@@ -159,9 +159,17 @@ function App() {
 
       {joinLink && (
         <p>
-          Share this link to invite others: <a href={joinLink}>{joinLink}</a>
+          Share this link to invite others:{" "}
+          <a href={joinLink} target="_blank" rel="noopener noreferrer">
+            {joinLink}
+          </a>
+          <button
+            onClick={() => navigator.clipboard.writeText(joinLink)}>
+            <img src="\src\assets\copy.png" style={{ width: '25px', verticalAlign: 'middle' }}></img>
+          </button>
         </p>
       )}
+
 
       {!connected && <p>Connecting...</p>}
 
