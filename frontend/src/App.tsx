@@ -71,43 +71,6 @@ function App() {
     };
   }, []);
 
-  // const animateMoves = (moves: any[]): Promise<void> => {
-  //   return new Promise((resolve) => {
-  //     let i = 0;
-  //     const intervalId = setInterval(() => {
-  //       if (i < moves.length) {
-  //         setCurrentBoard(moves[i]);
-  //         i++;
-  //       } else {
-  //         clearInterval(intervalId);
-  //         resolve();
-  //       }
-  //     }, 10);
-  //   });
-  // };
-
-  // const animateMoves = (moves: any[]): Promise<void> => {
-  //   console.log("Animating moves:", moves);
-  //   return new Promise((resolve) => {
-  //     const intervalId = setInterval(() => {
-  //       for (const move of moves) {
-  //         console.log("Move", move);
-  //         setCurrentBoard((prevBoard:any) => {
-  //           console.log("Move at i:", move);
-  //           prevBoard[move.x][move.y] = {
-  //             count: move.count,
-  //             owner: move.owner
-  //           };
-  //           return prevBoard;
-  //         });
-  //       }
-
-  //       clearInterval(intervalId);
-  //       resolve();
-  //     }, 100);
-  //   });
-  // };
-
   const animateMoves = (moves: any[]): Promise<void> => {
     // console.log("Animating moves:", moves);
     return new Promise((resolve) => {
@@ -117,6 +80,9 @@ function App() {
         if (i < moves.length) {
           const move = moves[i];
           // console.log("Animating move:", move);
+
+          const audio = new Audio("/pop.mp3"); // file in public/ folder
+          audio.play().catch((err) => console.warn("Audio play failed:", err));
 
           setCurrentBoard((prevBoard: any) => {
             // Create a deep copy (so React re-renders)
