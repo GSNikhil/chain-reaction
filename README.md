@@ -1,0 +1,105 @@
+# Chain Reaction 🎮
+
+This is a **monorepo** for the Chain Reaction multiplayer game, consisting of both the backend server and frontend client.  
+- **Backend**: Node.js + Express + Socket.IO (real-time game server)  
+- **Frontend**: React + Vite (interactive game UI)  
+
+The game supports **real-time multiplayer**, custom rooms, turn-based gameplay, and player elimination.  
+
+---
+
+## 📂 Project Structure
+
+chain-reaction/
+backend/ # Backend server (Node.js + Express + Socket.IO + TypeScript)
+frontend/ # Frontend client (React + Vite + TypeScript)
+README.md # Monorepo overview (this file)
+
+
+- See [backend/README.md](./backend/README.md) for backend details.  
+- See [frontend/README.md](./frontend/README.md) for frontend details.  
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm
+
+### Clone the Repository
+```sh
+git clone https://github.com/GSNikhil/chain-reaction.git
+cd chain-reaction
+```
+
+### Install Dependencies
+
+Backend:
+```sh
+cd backend
+npm install
+```
+
+Frontend:
+```sh
+cd ../frontend
+npm install
+```
+### Run in Development Mode
+
+Start backend:
+```sh
+cd backend
+npm run dev
+```
+
+Start frontend:
+```sh
+cd ../frontend
+npm run dev
+```
+
+
+## Rules of Chain Reaction
+
+Chain Reaction is a turn-based strategy board game where players take turns placing orbs on a grid.
+
+#### Gameplay
+
+**Turns**: Players take turns to place an orb in an empty cell or in a cell already occupied by their own orbs.
+
+**Cell Capacity**: Each cell can hold a limited number of orbs, depending on its location:
+
+- Corner cells: Capacity = 1
+- Edge cells: Capacity = 2
+- Middle cells: Capacity = 3
+
+#### Explosion & Chain Reaction:
+
+When a cell exceeds its capacity, it explodes. The orbs split into the adjacent cells (up, down, left, right). If the adjacent cells belong to opponents, they get converted to the exploding player’s color. This can trigger further explosions — creating a chain reaction.
+
+**Elimination**: A player is eliminated when all their orbs are destroyed or converted.
+
+**Victory**: The last player remaining on the board wins the game.
+
+#### Example
+
+- A player places an orb in a corner cell with capacity 2.
+- On the next turn, they place another orb in the same cell.
+- The cell now has 2 orbs and exceeds its capacity.
+- It explodes, sending 1 orb each to its two adjacent cells.
+- If those cells belong to opponents, their orbs flip to the current player’s color.
+
+## 🌐 Deployment
+
+- Backend can be deployed to platforms like Render, Vercel, or Heroku. 
+- Frontend can be deployed to Vercel, Netlify, or any static hosting provider.
+- I am using render and Netlify.
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
