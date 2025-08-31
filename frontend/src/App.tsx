@@ -4,6 +4,10 @@ import { socket } from "./socket";
 import Board from "./Board";
 import "./App.css";
 
+import copyIcon from './assets/copy.png';
+import homeIcon from './assets/home.png';
+import logoImage from './assets/logo.png';
+
 
 function App() {
   const [connected, setConnected] = useState(false);
@@ -156,9 +160,9 @@ function App() {
   return (
     <div style={{ padding: 20, textAlign: "center", width: "100%" }}>
       <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-        {!gameState && <img src="frontend/src/assets/logo.png" style={{ width: '100%', maxWidth: '100px' }}></img>}
+        {!gameState && <img src={logoImage} style={{ width: '100%', maxWidth: '100px' }}></img>}
         {gameState && <h4>
-          <img src="frontend/src/assets/home.png" style={{ width: '25px', verticalAlign: 'middle', color: 'white' }}></img>
+          <img src={homeIcon} style={{ width: '25px', verticalAlign: 'middle', color: 'white' }}></img>
           Home</h4>}
         <h1>Chain Reaction</h1>
       </a>
@@ -171,7 +175,7 @@ function App() {
           </a>
           <button
             onClick={() => navigator.clipboard.writeText(joinLink)}>
-            <img src="frontend/src/assets/copy.png" style={{ width: '25px', verticalAlign: 'middle' }}></img>
+            <img src={copyIcon} style={{ width: '25px', verticalAlign: 'middle' }}></img>
           </button>
         </p>
       )}
